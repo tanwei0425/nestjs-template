@@ -1,0 +1,22 @@
+# 开发环境配置
+NODE_ENV=development
+# 接口前缀
+API_PREFIX=api
+# 端口号
+APP_PORT=3001
+# app名称
+APP_NAME="NestJS API"
+# 数据库地址
+DATABASE_HOST=localhost  
+# 数据库端口
+DATABASE_PORT=3306
+# 数据库登录名
+DATABASE_USERNAME=root
+# 数据库登录密码
+DATABASE_PASSWORD=root
+# 数据库名字
+DATABASE_NAME=nestjs
+# 根据实体自动创建数据库表，生产环境建议关闭
+DATABASE_SYNCHRONIZE=true
+# 最大链接数
+DATABASE_MAX_CONNECTIONS=100
