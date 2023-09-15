@@ -4,24 +4,35 @@ import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './core/filter/http-exception/http-exception.filter';
 import { TransformInterceptor } from './core/interceptor/transform/transform.interceptor';
 import { AllConfigType } from './config/config.types';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService<AllConfigType>);
+  const appName = configService.getOrThrow('app.appName', { infer: true });
+  const appVersion = configService.getOrThrow('app.version', { infer: true });
+  const appApiPrefix = configService.getOrThrow('app.apiPrefix', {
+    infer: true,
+  });
+  const appPort = configService.getOrThrow('app.port', { infer: true });
 
   // 设置全局路由前缀
-  app.setGlobalPrefix(
-    configService.getOrThrow('app.apiPrefix', { infer: true }),
-    {
-      exclude: ['/'],
-    },
-  );
+  app.setGlobalPrefix(appApiPrefix, { exclude: ['/'] });
   // 注册全局错误的过滤器
   app.useGlobalFilters(new HttpExceptionFilter());
   // 注册全局拦截器
   app.useGlobalInterceptors(new TransformInterceptor());
-  // 设置d端口号
-  await app.listen(configService.getOrThrow('app.port', { infer: true }));
+  // 设置swagger文档
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle(`${appName}管理后台`)
+    .setDescription(`${appName}管理后台接口文档`)
+    .setVersion(appVersion)
+    .addBearerAuth()
+    .build();
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup('docs', app, document);
+  // 设置端口号
+  await app.listen(appPort);
 }
 bootstrap();
 
@@ -48,4 +59,4 @@ bootstrap();
  * 3、文件posts.module.ts中会自动引入PostsService,并且在@Module装饰器的providers中注入注入
  */
 
-// nest-cli提供的创建命令还有很多， 比如创建过滤器、拦截器和中间件等
+// nest-cli提供的创建命令还有很多， 比如创建过滤器（nest g filter x/x.ts）、拦截器（nest g interceptor x/x.ts）和中间件等

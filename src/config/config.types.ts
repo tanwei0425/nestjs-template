@@ -3,6 +3,7 @@ export type AppConfig = {
   port: number;
   apiPrefix: string;
   appName: string;
+  version: string;
 };
 export type DatabaseConfig = {
   url?: string;
