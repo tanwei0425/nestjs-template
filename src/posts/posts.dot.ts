@@ -11,3 +11,11 @@ export class CreatePostDto {
   @ApiProperty({ description: '类型' })
   readonly type: number;
 }
+export class getAllPostDto extends CreatePostDto {
+  @ApiProperty({ description: 'id', default: 1 })
+  readonly id: number;
+  @ApiProperty({ description: '创建时间' })
+  readonly create_time: string;
+  @ApiProperty({ description: '更新时间' })
+  readonly update_time: string;
+}
