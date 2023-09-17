@@ -61,4 +61,10 @@ bootstrap();
  * 3、文件posts.module.ts中会自动引入PostsService,并且在@Module装饰器的providers中注入注入
  */
 
-// nest-cli提供的创建命令还有很多， 比如创建过滤器（nest g filter x/x.ts）、拦截器（nest g interceptor x/x.ts）和中间件等
+/**
+ * nest-cli提供的创建命令还有很多， 比如
+ * 1、创建过滤器：nest g filter core/filter/http-exception
+ * 2、拦截器（nest g interceptor core/interceptor/transform
+ * 3、中间件（ nest g middleware core/middleware/logger
+ * ...
+ */

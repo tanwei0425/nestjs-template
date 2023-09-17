@@ -1,3 +1,6 @@
+/**
+ * http 响应映射拦截器
+ */
 import {
   CallHandler,
   ExecutionContext,

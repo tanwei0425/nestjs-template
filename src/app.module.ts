@@ -1,7 +1,8 @@
-import { Module } from '@nestjs/common';
+import { Module, MiddlewareConsumer } from '@nestjs/common';
 import { ConfigService, ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 // import { PostsEntity } from './posts/posts.entity';
+import { LoggerMiddleware } from './core/middleware/logger/logger.middleware';
 import { PostsModule } from './posts/posts.module';
 import appConfig from './config/app.config';
 import databaseConfig from './config/database.config';
@@ -47,4 +48,17 @@ import databaseConfig from './config/database.config';
   // 导出服务的列表，供其他模块导入使用。如果希望当前模块下的服务可以被其他模块共享，需要在这里配置导出；
   exports: [],
 })
-export class AppModule {}
+export class AppModule {
+  // 也可以在main中app.use(logger)绑定全局中间件
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LoggerMiddleware) // 应用中间件
+      // 绑定多个中间件，在 apply() 方法内用逗号分隔它们
+      // .apply(cors(), helmet(), logger).forRoutes(CatsController);
+      // .exclude({ path: 'user', method: RequestMethod.POST }) // 排除user的post方法
+      .forRoutes('*'); // 监听路径  参数：路径名或*，*是匹配所以的路由
+    // .forRoutes({ path: 'user', method: RequestMethod.POST }, { path: 'album', method: RequestMethod.ALL }); //多个
+    // .apply(UserMiddleware) // 支持多个中间件
+    // .forRoutes('user')
+  }
+}
