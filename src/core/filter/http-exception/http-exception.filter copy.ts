@@ -12,29 +12,13 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse(); // 获取请求上下文中的response对象
     const status = exception.getStatus(); // 获取异常状态码
 
-    /**
-     * @todo 这里后期要根据<status>状态码，对应的去映射<code>码给前端
-     * code === -1 ：前端直接全局报message的错
-     * code === [其它] 单独进行特殊场景判断
-     */
-    const exceptionResponse: any = exception.getResponse();
-    let validMessage: string = '';
-    for (const key in exception) {
-      console.log('===过滤器===', key, exception[key]);
-    }
-    if (typeof exceptionResponse === 'object') {
-      validMessage =
-        typeof exceptionResponse.message === 'string'
-          ? exceptionResponse.message
-          : exceptionResponse.message[0];
-    }
-
+    // 设置错误信息
     const message = exception.message
       ? exception.message
       : `${status >= 500 ? 'Service Error' : 'Client Error'}`;
     const errorResponse = {
       data: {},
-      message: validMessage || message,
+      message: message,
       code: -1,
     };
 

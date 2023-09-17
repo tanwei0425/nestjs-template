@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
+import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './core/filter/http-exception/http-exception.filter';
 import { TransformInterceptor } from './core/interceptor/transform/transform.interceptor';
@@ -15,13 +16,6 @@ async function bootstrap() {
     infer: true,
   });
   const appPort = configService.getOrThrow('app.port', { infer: true });
-
-  // 设置全局路由前缀
-  app.setGlobalPrefix(appApiPrefix, { exclude: ['/'] });
-  // 注册全局错误的过滤器
-  app.useGlobalFilters(new HttpExceptionFilter());
-  // 注册全局拦截器
-  app.useGlobalInterceptors(new TransformInterceptor());
   // 设置swagger文档
   const swaggerConfig = new DocumentBuilder()
     .setTitle(`${appName}管理后台`)
@@ -31,6 +25,14 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('docs', app, document);
+  // 设置全局路由前缀
+  app.setGlobalPrefix(appApiPrefix, { exclude: ['/'] });
+  // 注册全局错误的过滤器
+  app.useGlobalFilters(new HttpExceptionFilter());
+  // 注册全局拦截器
+  app.useGlobalInterceptors(new TransformInterceptor());
+  // 注册全局数据验证
+  app.useGlobalPipes(new ValidationPipe());
   // 设置端口号
   await app.listen(appPort);
 }
