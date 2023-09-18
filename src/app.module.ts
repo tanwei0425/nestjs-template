@@ -1,7 +1,6 @@
-import { Module, MiddlewareConsumer } from '@nestjs/common';
+import { Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
 import { ConfigService, ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-// import { PostsEntity } from './posts/posts.entity';
 import { LoggerMiddleware } from './core/middleware/logger/logger.middleware';
 import { PostsModule } from './posts/posts.module';
 import appConfig from './config/app.config';
@@ -55,10 +54,11 @@ export class AppModule {
       .apply(LoggerMiddleware) // 应用中间件
       // 绑定多个中间件，在 apply() 方法内用逗号分隔它们
       // .apply(cors(), helmet(), logger).forRoutes(CatsController);
-      // .exclude({ path: 'user', method: RequestMethod.POST }) // 排除user的post方法
-      .forRoutes('*'); // 监听路径  参数：路径名或*，*是匹配所以的路由
+      // .exclude({ path: 'posts', method: RequestMethod.GET }) // 排除posts的GET方法
+      .forRoutes({ path: '*', method: RequestMethod.ALL }); // 监听路径  参数：路径名或*，*是匹配所以的路由
+    // 支持多个中间件链式操作
     // .forRoutes({ path: 'user', method: RequestMethod.POST }, { path: 'album', method: RequestMethod.ALL }); //多个
-    // .apply(UserMiddleware) // 支持多个中间件
+    // .apply(UserMiddleware)
     // .forRoutes('user')
   }
 }

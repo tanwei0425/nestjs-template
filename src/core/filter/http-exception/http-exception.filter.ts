@@ -23,7 +23,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const exceptionResponse: any = exception.getResponse();
     let validMessage: string = '';
     for (const key in exception) {
-      console.log('===过滤器===', key, exception[key]);
+      console.log('===异常过滤器===', key, exception[key]);
     }
     if (typeof exceptionResponse === 'object') {
       validMessage =
