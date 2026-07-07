@@ -53,6 +53,23 @@ export class PostsController {
     type: [getAllPostDto],
     description: '操作成功',
   })
+  /**
+   * 测试
+   * @returns
+   */
+  @ApiOperation({
+    summary: '接口测试',
+    description: '接口测试的api接口',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '操作成功',
+  })
+  @Get('list')
+  getPostsHello(): string {
+    console.log(process.env.APP_NAME, 'appName');
+    return this.postsService.getPostsHello();
+  }
   @Get()
   async findAll(@Query() query): Promise<PostsRo> {
     return await this.postsService.findAll(query);
@@ -120,22 +137,5 @@ export class PostsController {
   @Delete(':id')
   async remove(@Param('id') id) {
     return await this.postsService.remove(id);
-  }
-
-  /**
-   * 测试
-   * @returns
-   */
-  @ApiOperation({
-    summary: '接口测试',
-    description: '接口测试的api接口',
-  })
-  @ApiResponse({
-    status: 200,
-    description: '操作成功',
-  })
-  @Get('list')
-  getPostsHello(): string {
-    return this.postsService.getPostsHello();
   }
 }

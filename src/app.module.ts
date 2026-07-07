@@ -6,13 +6,14 @@ import { PostsModule } from './posts/posts.module';
 import appConfig from './config/app.config';
 import databaseConfig from './config/database.config';
 
+const envFilePath = `.env.${process.env.NODE_ENV || 'dev'}`;
 // 模块装饰器类
 @Module({
   // 导入模块的列表，如果需要使用其他模块的服务，需要通过这里导入；
   imports: [
     ConfigModule.forRoot({
       isGlobal: true, // 设置为全局
-      envFilePath: ['.env.dev'],
+      envFilePath,
       load: [appConfig, databaseConfig],
     }),
     TypeOrmModule.forRootAsync({
